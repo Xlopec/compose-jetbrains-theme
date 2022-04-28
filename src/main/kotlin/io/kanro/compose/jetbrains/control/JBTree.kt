@@ -60,7 +60,7 @@ fun JBTreeItem(
         ) {
             Row {
                 Icon(
-                    resource = "jetbrains/AllIcons/actions/arrowExpand.svg",
+                    resource = "/jetbrains/AllIcons/actions/arrowExpand.svg",
                     modifier = Modifier.size(16.dp).clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null

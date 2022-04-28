@@ -76,8 +76,8 @@ private fun CheckboxImpl(
     modifier: Modifier
 ) {
     val icon = when (value) {
-        ToggleableState.On -> themedSvgResource("jetbrains/AllIcons/actions/checkmark.svg")
-        ToggleableState.Indeterminate -> themedSvgResource("jetbrains/AllIcons/actions/checkmark_indeterminate.svg")
+        ToggleableState.On -> themedSvgResource("/jetbrains/AllIcons/actions/checkmark.svg")
+        ToggleableState.Indeterminate -> themedSvgResource("/jetbrains/AllIcons/actions/checkmark_indeterminate.svg")
         else -> null
     }
     val iconFilter = if (!enabled) {
