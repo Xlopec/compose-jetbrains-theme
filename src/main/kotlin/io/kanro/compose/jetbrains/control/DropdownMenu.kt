@@ -1,23 +1,11 @@
 package io.kanro.compose.jetbrains.control
 
-import androidx.compose.foundation.Indication
-import androidx.compose.foundation.IndicationInstance
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -26,19 +14,14 @@ import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntRect
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import io.kanro.compose.jetbrains.JBTheme
 import io.kanro.compose.jetbrains.SelectionScope
 import io.kanro.compose.jetbrains.color.LocalPanelColors
 
+private val LocalDismissRequestProvider = staticCompositionLocalOf<() -> Unit> { error("no onDismissRequest provided") }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -72,7 +55,9 @@ fun DropdownMenu(
         ) {
             val panelColor = LocalPanelColors.current
             Column(modifier.background(panelColor.bgContent).border(1.dp, panelColor.border).width(IntrinsicSize.Max)) {
-                content()
+                CompositionLocalProvider(LocalDismissRequestProvider provides onDismissRequest) {
+                    content()
+                }
             }
         }
     }
@@ -86,13 +71,17 @@ fun DropdownMenuItem(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable () -> Unit
 ) {
+    val dismissRequest = LocalDismissRequestProvider.current
     Box(
         modifier
             .clickable(
                 interactionSource = interactionSource,
                 indication = DropdownMenuItemHoverIndication,
                 enabled = enabled,
-                onClick = onClick
+                onClick = {
+                    onClick()
+                    dismissRequest()
+                }
             )
             .fillMaxWidth()
             .hoverable(interactionSource, enabled),
