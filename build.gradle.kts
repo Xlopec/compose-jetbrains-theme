@@ -1,3 +1,5 @@
+import org.jetbrains.compose.compose
+
 plugins {
     kotlin("jvm") version "1.6.10"
     id("org.jetbrains.compose") version "1.0.1"
@@ -24,7 +26,21 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation(compose.desktop.currentOs) {
+
+    // FIXME this is a temporary workaround
+    implementation(compose.desktop.macos_arm64) {
+        exclude("org.jetbrains.compose.material")
+    }
+    implementation(compose.desktop.macos_x64) {
+        exclude("org.jetbrains.compose.material")
+    }
+    implementation(compose.desktop.linux_x64) {
+        exclude("org.jetbrains.compose.material")
+    }
+    implementation(compose.desktop.linux_arm64) {
+        exclude("org.jetbrains.compose.material")
+    }
+    implementation(compose.desktop.windows_x64) {
         exclude("org.jetbrains.compose.material")
     }
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
