@@ -1,8 +1,6 @@
-import org.jetbrains.compose.compose
-
 plugins {
-    kotlin("jvm") version "1.6.10"
-    id("org.jetbrains.compose") version "1.0.1"
+    kotlin("jvm") version "1.8.0"
+    id("org.jetbrains.compose") version "1.3.0"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0" apply false
     id("org.jetbrains.changelog") version "1.3.0"
     id("nebula.maven-publish") version "18.0.0"
@@ -49,6 +47,11 @@ dependencies {
 
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    targetCompatibility = "11"
+    sourceCompatibility = "11"
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
